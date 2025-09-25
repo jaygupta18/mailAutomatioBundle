@@ -15,21 +15,25 @@ A Chrome browser extension that adds an AI-powered email processing button to Gm
 
 ```
 mailAutomatioBundle/
-├── Extension Files/
+├── gmail-extension/           # Chrome Extension Files
 │   ├── manifest.json          # Extension configuration
 │   ├── content.js             # Gmail interface integration
 │   ├── background.js          # Background processing
 │   ├── popup.html             # Extension popup UI
 │   ├── popup.js               # Popup functionality
+│   ├── settings.html          # Settings page
 │   ├── styles.css             # Extension styling
-│   └── icons/                 # Extension icons
+│   └── icons/                 # Extension icons (icon16.png, icon48.png, icon128.png)
 ├── Python Backend/
 │   ├── server.py              # Flask API server
-│   ├── main.py                # Original email processing logic
+│   ├── main.py                # Email processing logic
 │   ├── openai_reply.py        # AI reply generation
 │   ├── gmail_helper.py        # Gmail API helpers
 │   ├── auth.py                # Gmail authentication
-│   └── requirements.txt       # Python dependencies
+│   ├── create_icons.py        # Icon generation utility
+│   ├── requirements.txt       # Python dependencies
+│   └── config.example.py      # Configuration template
+├── .gitignore                 # Git ignore rules
 └── README.md                  # This file
 ```
 
@@ -43,7 +47,23 @@ mailAutomatioBundle/
 
 ## Setup Instructions
 
-### 1. Python Backend Setup
+### 1. Quick Setup (Recommended)
+
+1. **Run the automated setup:**
+   ```bash
+   python setup.py
+   ```
+
+2. **Configure your API keys:**
+   - Edit `config.py` and add your Google Generative AI API key
+   - Download Gmail API credentials as `credentials.json`
+
+3. **Start the server:**
+   ```bash
+   python start.py
+   ```
+
+### 2. Manual Setup
 
 1. **Install Python dependencies:**
    ```bash
@@ -58,8 +78,19 @@ mailAutomatioBundle/
    - Download the credentials file and save as `credentials.json` in the project root
 
 3. **Configure AI API Key:**
-   - Get your Google Generative AI API key
-   - Update the API key in `openai_reply.py`
+   - Get your Google Generative AI API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - Create a `config.py` file by copying `config.example.py`:
+     ```bash
+     cp config.example.py config.py
+     ```
+   - Edit `config.py` and add your API key:
+     ```python
+     GEMINI_API_KEY = "your_actual_api_key_here"
+     ```
+   - Alternatively, set the environment variable:
+     ```bash
+     export GEMINI_API_KEY="your_actual_api_key_here"
+     ```
 
 4. **Generate extension icons (optional):**
    ```bash
@@ -67,23 +98,23 @@ mailAutomatioBundle/
    python create_icons.py
    ```
 
-### 2. Chrome Extension Setup
+### 3. Chrome Extension Setup
 
 1. **Load the extension in Chrome:**
    - Open Chrome and go to `chrome://extensions/`
    - Enable "Developer mode" (toggle in top right)
    - Click "Load unpacked"
-   - Select the folder containing the extension files
+   - Select the `gmail-extension` folder
 
 2. **Grant permissions:**
    - The extension will request permissions for Gmail and localhost
    - Click "Allow" when prompted
 
-### 3. Start the Server
+### 4. Start the Server
 
 1. **Run the Flask server:**
    ```bash
-   python server.py
+   python start.py
    ```
    
    The server will start on `http://localhost:5000`
