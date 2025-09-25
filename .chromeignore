@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.py
+*.bat
+*.md
+requirements.txt
+test_server.py
+create_icons.py 

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail AI Assistant</title>
+    <style>
+        body {
+            width: 320px;
+            padding: 20px;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            margin: 8px 0 0 0;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .status {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+        }
+        
+        .status-dot.offline {
+            background: #f44336;
+        }
+        
+        .status-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .action-button {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        
+        .action-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .action-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .info {
+            font-size: 11px;
+            opacity: 0.7;
+            line-height: 1.4;
+            text-align: center;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Gmail AI Assistant</h1>
+        <p>Automatically process and reply to emails</p>
+    </div>
+    
+    <div class="status">
+        <div class="status-indicator">
+            <div class="status-dot" id="statusDot"></div>
+            <span class="status-text" id="statusText">Checking server...</span>
+        </div>
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-value" id="processedCount">0</span>
+                <span>Processed</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value" id="successRate">0%</span>
+                <span>Success</span>
+            </div>
+        </div>
+    </div>
+    
+    <button class="action-button" id="processButton">
+        🚀 Process Emails Now
+    </button>
+    
+    <button class="action-button" id="settingsButton">
+        ⚙️ Settings
+    </button>
+    
+    <div class="info">
+        Make sure the AI server is running on localhost:5000 before using this extension.
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html> 

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail AI Assistant - Settings</title>
+    <style>
+        body {
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        
+        .setting-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .status.success {
+            background: rgba(76, 175, 80, 0.3);
+        }
+        
+        .status.error {
+            background: rgba(244, 67, 54, 0.3);
+        }
+        #maxEmails{
+            background-color: rgb(39, 43, 43) !important;
+            color: rgb(239, 233, 233);
+        }
+        #replyStyle{
+            background-color: rgb(39, 43, 43) !important;
+            color: rgb(239, 233, 233);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ Gmail AI Assistant Settings</h1>
+        
+        <div class="setting-group">
+            <label for="serverUrl">Server URL:</label>
+            <input type="text" id="serverUrl" placeholder="http://localhost:5000" value="http://localhost:5000">
+        </div>
+        
+        <div class="setting-group">
+            <label for="maxEmails">Maximum Emails to Process:</label>
+            <select id="maxEmails">
+                <option value="5">5 emails</option>
+                <option value="10" selected>10 emails</option>
+                <option value="20">20 emails</option>
+                <option value="50">50 emails</option>
+            </select>
+        </div>
+        
+        <div class="setting-group">
+            <label for="replyStyle">Reply Style:</label>
+            <select id="replyStyle">
+                <option value="professional" selected>Professional</option>
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+                <option value="friendly">Friendly</option>
+            </select>
+        </div>
+        
+        <div class="setting-group">
+            <label for="customPrompt">Custom AI Prompt:</label>
+            <textarea id="customPrompt" rows="4" placeholder="Enter custom instructions for the AI assistant..."></textarea>
+        </div>
+        
+        <div class="setting-group">
+            <button onclick="saveSettings()">💾 Save Settings</button>
+            <button onclick="testConnection()">🔗 Test Connection</button>
+            <button onclick="resetSettings()">🔄 Reset to Default</button>
+        </div>
+        
+        <div id="status" class="status" style="display: none;"></div>
+    </div>
+    
+    <script>
+        // Load saved settings
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+        });
+        
+        function loadSettings() {
+            chrome.storage.local.get(['serverUrl', 'maxEmails', 'replyStyle', 'customPrompt'], (result) => {
+                if (result.serverUrl) document.getElementById('serverUrl').value = result.serverUrl;
+                if (result.maxEmails) document.getElementById('maxEmails').value = result.maxEmails;
+                if (result.replyStyle) document.getElementById('replyStyle').value = result.replyStyle;
+                if (result.customPrompt) document.getElementById('customPrompt').value = result.customPrompt;
+            });
+        }
+        
+        function saveSettings() {
+            const settings = {
+                serverUrl: document.getElementById('serverUrl').value,
+                maxEmails: document.getElementById('maxEmails').value,
+                replyStyle: document.getElementById('replyStyle').value,
+                customPrompt: document.getElementById('customPrompt').value
+            };
+            
+            chrome.storage.local.set(settings, () => {
+                showStatus('Settings saved successfully!', 'success');
+            });
+        } 
+        
+        async function testConnection() {
+            const serverUrl = document.getElementById('serverUrl').value;
+            try {
+                const response = await fetch(`${serverUrl}/health`);
+                if (response.ok) {
+                    showStatus('✅ Server connection successful!', 'success');
+                } else {
+                    showStatus('❌ Server responded with error', 'error');
+                }
+            } catch (error) {
+                showStatus('❌ Cannot connect to server', 'error');
+            }
+        }
+        
+        function resetSettings() {
+            document.getElementById('serverUrl').value = 'http://localhost:5000';
+            document.getElementById('maxEmails').value = '10';
+            document.getElementById('replyStyle').value = 'professional';
+            document.getElementById('customPrompt').value = '';
+            
+            chrome.storage.local.clear(() => {
+                showStatus('Settings reset to default!', 'success');
+            });
+        }
+        
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 
