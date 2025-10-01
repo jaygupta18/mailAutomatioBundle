@@ -15,7 +15,7 @@ A Chrome browser extension that adds an AI-powered email processing button to Gm
 
 ```
 mailAutomatioBundle/
-├── gmail-extension/           # Chrome Extension Files
+├── gmail-extension/           # Chrome Extension (Frontend)
 │   ├── manifest.json          # Extension configuration
 │   ├── content.js             # Gmail interface integration
 │   ├── background.js          # Background processing
@@ -24,15 +24,24 @@ mailAutomatioBundle/
 │   ├── settings.html          # Settings page
 │   ├── styles.css             # Extension styling
 │   └── icons/                 # Extension icons (icon16.png, icon48.png, icon128.png)
-├── Python Backend/
+├── backend/                   # Python Backend (Deployable)
 │   ├── server.py              # Flask API server
 │   ├── main.py                # Email processing logic
 │   ├── openai_reply.py        # AI reply generation
 │   ├── gmail_helper.py        # Gmail API helpers
 │   ├── auth.py                # Gmail authentication
-│   ├── create_icons.py        # Icon generation utility
+│   ├── setup.py               # Setup utility
+│   ├── start.py               # Application starter
 │   ├── requirements.txt       # Python dependencies
-│   └── config.example.py      # Configuration template
+│   ├── config.example.py      # Configuration template
+│   ├── credentials.example    # Credentials format example
+│   ├── token.example          # Token format example
+│   ├── Dockerfile             # Docker configuration
+│   ├── docker-compose.yml     # Docker Compose setup
+│   ├── deploy.sh              # Linux/Mac deployment script
+│   ├── deploy.bat             # Windows deployment script
+│   └── README.md              # Backend documentation
+├── create_icons.py            # Icon generation utility (shared)
 ├── .gitignore                 # Git ignore rules
 └── README.md                  # This file
 ```
@@ -47,27 +56,38 @@ mailAutomatioBundle/
 
 ## Setup Instructions
 
-### 1. Quick Setup (Recommended)
+### 1. Backend Deployment (Choose One)
 
-1. **Run the automated setup:**
-   ```bash
-   python setup.py
-   ```
+#### Option A: Docker Deployment (Recommended)
+```bash
+cd backend
+# Add your credentials.json and config.py
+./deploy.sh  # Linux/Mac
+# OR
+deploy.bat   # Windows
+```
 
-2. **Configure your API keys:**
-   - Edit `config.py` and add your Google Generative AI API key
-   - Download Gmail API credentials as `credentials.json` (see `credentials.example` for format)
-   - The `token.json` file will be generated automatically after first authentication
+#### Option B: Local Python Deployment
+```bash
+cd backend
+pip install -r requirements.txt
+# Add your credentials.json and config.py
+python server.py
+```
 
-3. **Start the server:**
-   ```bash
-   python start.py
-   ```
+### 2. Frontend Setup (Chrome Extension)
 
-### 2. Manual Setup
+1. **Load the extension in Chrome:**
+   - Open Chrome and go to `chrome://extensions/`
+   - Enable "Developer mode" (toggle in top right)
+   - Click "Load unpacked"
+   - Select the `gmail-extension` folder
+
+### 3. Manual Setup (Alternative)
 
 1. **Install Python dependencies:**
    ```bash
+   cd backend
    pip install -r requirements.txt
    ```
 
@@ -76,7 +96,7 @@ mailAutomatioBundle/
    - Create a new project or select existing one
    - Enable Gmail API
    - Create OAuth 2.0 credentials
-   - Download the credentials file and save as `credentials.json` in the project root
+   - Download the credentials file and save as `credentials.json` in the backend folder
 
 3. **Configure AI API Key:**
    - Get your Google Generative AI API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
@@ -99,30 +119,12 @@ mailAutomatioBundle/
    python create_icons.py
    ```
 
-### 3. Chrome Extension Setup
-
-1. **Load the extension in Chrome:**
-   - Open Chrome and go to `chrome://extensions/`
-   - Enable "Developer mode" (toggle in top right)
-   - Click "Load unpacked"
-   - Select the `gmail-extension` folder
-
-2. **Grant permissions:**
-   - The extension will request permissions for Gmail and localhost
-   - Click "Allow" when prompted
-
-### 4. Start the Server
-
-1. **Run the Flask server:**
+5. **Start the server:**
    ```bash
-   python start.py
+   python server.py
    ```
    
    The server will start on `http://localhost:5000`
-
-2. **Verify the server is running:**
-   - Open `http://localhost:5000/health` in your browser
-   - You should see a JSON response indicating the server is healthy
 
 ## Usage
 
@@ -207,6 +209,38 @@ Enable debug logging in `server.py`:
 app.run(host='0.0.0.0', port=5000, debug=True)
 ```
 
+## 🚀 Deployment
+
+### Backend Deployment Options
+
+1. **Docker Deployment (Recommended)**
+   ```bash
+   cd backend
+   ./deploy.sh  # Linux/Mac
+   # OR
+   deploy.bat   # Windows
+   ```
+
+2. **Cloud Platform Deployment**
+   - **Heroku**: Use the backend folder as your app root
+   - **AWS ECS**: Use the provided Dockerfile
+   - **Google Cloud Run**: Deploy the backend folder
+   - **Railway**: Connect your backend folder
+
+3. **VPS/Server Deployment**
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   python server.py
+   ```
+
+### Frontend Distribution
+
+The Chrome extension (`gmail-extension/` folder) can be:
+- Loaded as an unpacked extension for development
+- Packed and distributed through Chrome Web Store
+- Used privately by loading the unpacked extension
+
 ## Security Considerations
 
 - **API Keys**: Never commit API keys to version control
@@ -215,6 +249,7 @@ app.run(host='0.0.0.0', port=5000, debug=True)
 - **Local Server**: The Flask server runs locally for security
 - **Permissions**: Extension only requests necessary permissions
 - **Sensitive Files**: The `.gitignore` file excludes `token.json`, `credentials.json`, and `config.py` from version control
+- **Production**: Use environment variables for sensitive data in production
 
 ## Development
 
