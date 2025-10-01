@@ -153,14 +153,12 @@ function startObserving() {
     setTimeout(injectButton, 8000);
 }
 
-// Initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', startObserving);
 } else {
     startObserving();
 }
 
-// Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'getStatus') {
         sendResponse({ isProcessing });

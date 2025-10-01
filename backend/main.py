@@ -26,7 +26,9 @@ def authenticate_gmail():
     return creds
 
 def create_message(to, subject, message_text):
+    
     message = MIMEText(message_text)
+    print(message)
     message['to'] = to
     message['subject'] = subject
     raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
