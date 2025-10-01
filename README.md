@@ -56,7 +56,8 @@ mailAutomatioBundle/
 
 2. **Configure your API keys:**
    - Edit `config.py` and add your Google Generative AI API key
-   - Download Gmail API credentials as `credentials.json`
+   - Download Gmail API credentials as `credentials.json` (see `credentials.example` for format)
+   - The `token.json` file will be generated automatically after first authentication
 
 3. **Start the server:**
    ```bash
@@ -167,6 +168,7 @@ The Flask server provides the following endpoints:
 3. **First-time authentication:**
    - Run `python main.py` once to authenticate
    - This will create `token.json` for future use
+   - See `token.example` for the expected format
 
 ### AI Configuration
 
@@ -209,8 +211,10 @@ app.run(host='0.0.0.0', port=5000, debug=True)
 
 - **API Keys**: Never commit API keys to version control
 - **OAuth Tokens**: Keep `token.json` secure and private
+- **Credentials**: Keep `credentials.json` secure and private
 - **Local Server**: The Flask server runs locally for security
 - **Permissions**: Extension only requests necessary permissions
+- **Sensitive Files**: The `.gitignore` file excludes `token.json`, `credentials.json`, and `config.py` from version control
 
 ## Development
 
