@@ -91,3 +91,5 @@ chrome.runtime.onInstalled.addListener(async () => {
         console.warn('AI server is not running:', error.message);
     }
 }); 
+
+
