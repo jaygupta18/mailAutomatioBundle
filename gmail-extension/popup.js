@@ -1,5 +1,5 @@
 // Popup script for Gmail AI Assistant
-let SERVER_URL = 'http://localhost:5000'; // Will be updated from settings
+let SERVER_URL = 'https://mailautomation-e048.onrender.com'; // Will be updated from settings
 
 // DOM elements
 const statusDot = document.getElementById('statusDot');
@@ -161,4 +161,4 @@ function updateStats(processed, success) {
     });
 }
 
-setInterval(checkServerStatus, 30000); // Check every 30 seconds 
+setInterval(checkServerStatus, 30000);  

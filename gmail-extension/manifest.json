@@ -10,7 +10,8 @@
   ],
   "host_permissions": [
     "https://mail.google.com/*",
-    "http://localhost:5000/*"
+    "http://localhost:5000/*",
+    "https://mailautomation-e048.onrender.com/health"
   ],
   "content_scripts": [
     {

@@ -1,5 +1,5 @@
 // Background script for Gmail AI Assistant
-let SERVER_URL = 'http://localhost:5000'; // Will be updated from settings
+let SERVER_URL = 'https://mailautomation-e048.onrender.com/'; // Will be updated from settings
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'processEmails') {
